@@ -9,6 +9,8 @@ class BoardView(QGraphicsView):
     def __init__(self, scene, parent):
         super().__init__(parent)
         self.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
+
         self.setObjectName("View")
         self.setBackgroundBrush(QBrush(QColor(60, 60, 60)))
         self.setScene(scene)
