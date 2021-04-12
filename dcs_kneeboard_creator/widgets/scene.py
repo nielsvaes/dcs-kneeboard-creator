@@ -2,7 +2,6 @@ import sys
 import logging
 logging.basicConfig(level=logging.INFO)
 
-
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
@@ -10,13 +9,20 @@ from PySide6.QtCore import *
 import ez_utils.general as utils
 import ez_utils.io_utils as io_utils
 
+from ..graphics.waypoint import Waypoint
+
 class BoardScene(QGraphicsScene):
     def __init__(self):
         super().__init__()
         self.setBackgroundBrush(QColor(20, 20, 20))
         self.setSceneRect(0, 0, 768, 1024)
 
+        self.TEST_DELETEME()
 
+
+        self.add_boundary()
+
+    def TEST_DELETEME(self):
         test = QGraphicsRectItem(0, 0, 50, 60)
         test.setBrush(QBrush(QColor(255, 0, 255)))
 
@@ -35,7 +41,8 @@ class BoardScene(QGraphicsScene):
         self.addItem(test)
         self.addItem(test2)
 
-        self.add_boundary()
+        waypoint = Waypoint(200, 400)
+        self.addItem(waypoint)
 
     def add_boundary(self):
         self.boundary = QGraphicsRectItem(0, 0, 768, 1024)
@@ -57,17 +64,17 @@ class BoardScene(QGraphicsScene):
     def dragMoveEvent(self, event):
         event.accept()
 
-    def dropEvent(self, event):
-        try:
-            class_name = event.source().selectedItems()[0].file_name_no_ext
-            module = event.source().selectedItems()[0].folder_name
-
-            x = event.scenePos().x()
-            y = event.scenePos().y()
-
-            dropped_node = self.add_node_to_view(class_name, module, x, y)
-        except Exception as err:
-            utils.trace(err)
+    # def dropEvent(self, event):
+    #     try:
+    #         class_name = event.source().selectedItems()[0].file_name_no_ext
+    #         module = event.source().selectedItems()[0].folder_name
+    #
+    #         x = event.scenePos().x()
+    #         y = event.scenePos().y()
+    #
+    #         dropped_node = self.add_node_to_view(class_name, module, x, y)
+    #     except Exception as err:
+    #         utils.trace(err)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_R and event.modifiers() == Qt.ControlModifier:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'dcs_kneeboard_creator.ui'
+## Form generated from reading UI file 'kneeboard_creator.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.0.2
 ##

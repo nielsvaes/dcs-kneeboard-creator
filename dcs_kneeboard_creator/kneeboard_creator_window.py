@@ -10,6 +10,7 @@ from .ui.kneeboard_creator import Ui_kneeboard_creator_window
 from .widgets.layer import LayerStackWidget
 from .widgets.view import BoardView
 from .widgets.scene import BoardScene
+from .widgets.toolbox import ToolBox
 from .graphics.layer import Layer
 
 class KneeboardCreatorWindow(QMainWindow, Ui_kneeboard_creator_window):
@@ -30,6 +31,8 @@ class KneeboardCreatorWindow(QMainWindow, Ui_kneeboard_creator_window):
 
         self.layer_stack_widget = LayerStackWidget()
         self.layer_layout.addWidget(self.layer_stack_widget)
+
+        self.tools_layout.addWidget(ToolBox())
 
         self.splt_view_tools.setSizes([800, 300])
 
