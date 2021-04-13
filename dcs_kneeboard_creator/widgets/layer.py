@@ -13,6 +13,38 @@ class Roles:
     WIDGET  = Qt.UserRole + 1
     GRAPHICS_LAYER  = Qt.UserRole + 2
 
+class LayerControlWidget(QWidget):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.setLayout(QVBoxLayout())
+
+        self.spacer = QSpacerItem(300, 10)
+        self.btn_new_layer = QPushButton()
+        self.btn_new_layer.setIcon(QIcon(ez_icons.get(c.black, i.add)))
+        self.btn_new_layer.clicked.connect(self.parent().add_layer)
+
+        self.btn_remove_layer = QPushButton()
+        self.btn_remove_layer.setIcon(QIcon(ez_icons.get(c.black, i.remove)))
+
+        self.btn_move_up = QPushButton()
+        self.btn_move_up.setIcon(QIcon(ez_icons.get(c.black, i.arrow_upward)))
+
+        self.btn_move_down = QPushButton()
+        self.btn_move_down.setIcon(QIcon(ez_icons.get(c.black, i.arrow_downward)))
+
+        self.layer_controls_layout = QHBoxLayout()
+        self.layer_controls_layout.addItem(self.spacer)
+        self.layer_controls_layout.addWidget(self.btn_new_layer)
+        self.layer_controls_layout.addWidget(self.btn_remove_layer)
+        self.layer_controls_layout.addWidget(self.btn_move_up)
+        self.layer_controls_layout.addWidget(self.btn_move_down)
+
+        self.layer_stack_widget = LayerStackWidget()
+        self.layout().addWidget(self.layer_stack_widget)
+        self.layout().addLayout(self.layer_controls_layout)
+
+        print(self.parent())
+
 
 class LayerStackWidget(QListWidget):
     def __init__(self):
@@ -29,13 +61,24 @@ class LayerStackWidget(QListWidget):
             index = self.count() + 1
             layer_text = "New Layer %s" % index
 
-        item_widget = LayerWidget(layer_text)
+        item_widget = CustomLayerItemWidget(layer_text)
         layer_widget_item = LayerWidgetItem(item_widget)
+        item_widget.setParent(layer_widget_item)
 
-        self.addItem(layer_widget_item)
+
+        row = 0
+        try:
+            row = self.row(self.selectedItems()[0])
+        except:
+            pass
+
+        self.insertItem(row, layer_widget_item)
         self.setItemWidget(layer_widget_item, item_widget)
 
         self.set_z_depths()
+
+        self.clearSelection()
+        self.setCurrentRow(row)
 
         return layer_widget_item
 
@@ -96,17 +139,21 @@ class LayerWidgetItem(QListWidgetItem):
         del self.__graphics_layer
 
 
-class LayerWidget(QWidget):
-    def __init__(self, text):
-        super().__init__()
+class CustomLayerItemWidget(QWidget):
+    def __init__(self, text, parent=None):
+        super().__init__(parent=parent)
         self.layout = QHBoxLayout()
 
         self.chk_visible = QCheckBox()
         self.chk_visible.setChecked(True)
         self.txt_name = CustomLineEdit(text)
+        self.btn_delete = QPushButton()
+        self.btn_delete.setIcon(QIcon(ez_icons.get(c.black, i.delete_forever)))
+        self.btn_delete.clicked.connect(self.delete_parent_item)
 
         self.layout.addWidget(self.chk_visible)
         self.layout.addWidget(self.txt_name)
+        self.layout.addWidget(self.btn_delete)
 
         self.setLayout(self.layout)
 
@@ -114,6 +161,9 @@ class LayerWidget(QWidget):
         self.layout.setContentsMargins(5, 3, 5, 3)
 
         self.text = text
+
+    def delete_parent_item(self):
+        print(self.parent())
 
     def mouseDoubleClickEvent(self, event):
         self.txt_name.setEnabled(True)

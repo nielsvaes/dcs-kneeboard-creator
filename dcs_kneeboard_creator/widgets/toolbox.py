@@ -14,16 +14,19 @@ class ToolBox(QWidget):
         super().__init__()
         self.setLayout(FlowLayout())
 
-        for index in range(25):
-            button = ToolBoxButton(icon=ez_icons.get(c.black, i.my_location), text="Waypoint")
-            self.layout().addWidget(button)
+        btn_waypoints = ToolBoxButton(icon=ez_icons.get(c.black, i.my_location), text="Waypoints")
+        self.layout().addWidget(btn_waypoints)
+
+        btn_image = ToolBoxButton(icon=ez_icons.get(c.black, i.image), text="Image")
+        self.layout().addWidget(btn_image)
 
 class ToolBoxButton(QToolButton):
     def __init__(self, text=None, icon=None):
         super().__init__()
         self.setMinimumSize(WidgetSizes.toolbox_button)
         self.setMaximumSize(WidgetSizes.toolbox_button)
-        self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        # self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        self.setToolButtonStyle(Qt.ToolButtonIconOnly)
 
         if text is not None:
             self.setText(text)
@@ -32,7 +35,6 @@ class ToolBoxButton(QToolButton):
                 icon = QIcon(icon)
             self.setIcon(icon)
             self.setIconSize(WidgetSizes.toolbox_button_icon)
-
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=0, spacing=-1):

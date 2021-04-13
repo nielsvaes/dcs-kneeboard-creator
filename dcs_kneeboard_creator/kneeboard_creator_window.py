@@ -7,7 +7,7 @@ import ez_icons
 from ez_icons import Icons, Color
 
 from .ui.kneeboard_creator import Ui_kneeboard_creator_window
-from .widgets.layer import LayerStackWidget
+from .widgets.layer import LayerControlWidget
 from .widgets.view import BoardView
 from .widgets.scene import BoardScene
 from .widgets.toolbox import ToolBox
@@ -29,8 +29,8 @@ class KneeboardCreatorWindow(QMainWindow, Ui_kneeboard_creator_window):
         self.view = BoardView(self.scene, self)
         self.view_layout.addWidget(self.view)
 
-        self.layer_stack_widget = LayerStackWidget()
-        self.layer_layout.addWidget(self.layer_stack_widget)
+        self.layer_control_widget = LayerControlWidget(self)
+        self.layer_layout.addWidget(self.layer_control_widget)
 
         self.tools_layout.addWidget(ToolBox())
 
@@ -43,7 +43,7 @@ class KneeboardCreatorWindow(QMainWindow, Ui_kneeboard_creator_window):
         self.men_new_layer.triggered.connect(self.add_layer)
 
     def add_layer(self):
-        layer_item = self.layer_stack_widget.new_layer_item()
+        layer_item = self.layer_control_widget.layer_stack_widget.new_layer_item()
         layer = Layer()
         layer.set_list_widget_item(layer_item)
         layer_item.set_graphics_layer(layer)
