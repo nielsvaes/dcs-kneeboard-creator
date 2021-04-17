@@ -112,7 +112,7 @@ class LayerStackWidget(QListWidget):
     def delete_layer(self, item_to_delete):
         deleted_item = self.takeItem(self.row(item_to_delete))
         deleted_item.destroy_graphics_layer()
-        del(deleted_item)
+        del deleted_item
 
     def dropEvent(self, event):
         super().dropEvent(event)
