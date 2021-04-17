@@ -32,12 +32,18 @@ class KneeboardCreatorWindow(QMainWindow, Ui_kneeboard_creator_window):
         self.layer_control_widget = LayerControlWidget(self)
         self.layer_layout.addWidget(self.layer_control_widget)
 
-        self.tools_layout.addWidget(ToolBox())
+        self.tool_box = ToolBox(parent=self)
+        self.tools_layout.addWidget(self.tool_box)
 
         self.splt_view_tools.setSizes([800, 300])
 
 
-        self.men_new_layer.setIcon(QIcon(ez_icons.get(Color.black, Icons.layers)))
+        self.men_new_layer.setIcon(QIcon(ez_icons.get(Color.black, Icons.add)))
+        self.men_duplicate_layer.setIcon(QIcon(ez_icons.get(Color.black, Icons.layers)))
+        self.men_del_layer.setIcon(QIcon(ez_icons.get(Color.black, Icons.remove)))
+
+        self.men_copy.setIcon(QIcon(ez_icons.get(Color.black, Icons.content_copy)))
+        self.men_paste.setIcon(QIcon(ez_icons.get(Color.black, Icons.content_paste)))
 
     def connect_signals(self):
         self.men_new_layer.triggered.connect(self.add_layer)
@@ -49,7 +55,11 @@ class KneeboardCreatorWindow(QMainWindow, Ui_kneeboard_creator_window):
         layer_item.set_graphics_layer(layer)
 
         self.scene.addItem(layer)
+        return layer_item
 
-
-        layer.add_pixmap(QPixmap(r"D:\PersonalCode\kneeboard_creator\kneeboard_creator\images\paper_test.jpg"))
-
+    def get_active_layer(self):
+        try:
+            return self.layer_control_widget.layer_stack_widget.selectedItems()[0]
+        except:
+            print("No active layer selected")
+            return None

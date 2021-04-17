@@ -8,17 +8,36 @@ from ez_icons import c, i
 
 from .. import utils
 from ..constants import WidgetSizes
+from .layer import CustomListWidgetItem
 
 class ToolBox(QWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent):
+        super().__init__(parent=parent)
         self.setLayout(FlowLayout())
 
+        self.__parent = parent
+
         btn_waypoints = ToolBoxButton(icon=ez_icons.get(c.black, i.my_location), text="Waypoints")
+        btn_waypoints.clicked.connect(self.enter_waypoint_tool)
         self.layout().addWidget(btn_waypoints)
 
         btn_image = ToolBoxButton(icon=ez_icons.get(c.black, i.image), text="Image")
         self.layout().addWidget(btn_image)
+
+        btn_move_layer = ToolBoxButton(icon=ez_icons.get(c.black, i.open_with), text="Move layer")
+        self.layout().addWidget(btn_move_layer)
+
+    def set_parent(self, value):
+        self.__parent = value
+
+    def parent(self):
+        return self.__parent
+
+    def enter_waypoint_tool(self):
+        active_layer: CustomListWidgetItem = self.parent().get_active_layer()
+        if active_layer is None:
+            active_layer = self.parent().add_layer()
+        print(active_layer.widget().txt_name.text())
 
 class ToolBoxButton(QToolButton):
     def __init__(self, text=None, icon=None):

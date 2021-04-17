@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'kneeboard_creator.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.0.2
+## Created by: Qt User Interface Compiler version 6.0.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -21,6 +21,14 @@ class Ui_kneeboard_creator_window(object):
         self.men_new_layer = QAction(kneeboard_creator_window)
         self.men_new_layer.setObjectName(u"men_new_layer")
         self.men_new_layer.setShortcutContext(Qt.ApplicationShortcut)
+        self.men_copy = QAction(kneeboard_creator_window)
+        self.men_copy.setObjectName(u"men_copy")
+        self.men_duplicate_layer = QAction(kneeboard_creator_window)
+        self.men_duplicate_layer.setObjectName(u"men_duplicate_layer")
+        self.men_del_layer = QAction(kneeboard_creator_window)
+        self.men_del_layer.setObjectName(u"men_del_layer")
+        self.men_paste = QAction(kneeboard_creator_window)
+        self.men_paste.setObjectName(u"men_paste")
         self.centralwidget = QWidget(kneeboard_creator_window)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
@@ -82,19 +90,26 @@ class Ui_kneeboard_creator_window(object):
         kneeboard_creator_window.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(kneeboard_creator_window)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1098, 22))
+        self.menubar.setGeometry(QRect(0, 0, 1098, 21))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuLayer = QMenu(self.menubar)
         self.menuLayer.setObjectName(u"menuLayer")
+        self.menuEdit = QMenu(self.menubar)
+        self.menuEdit.setObjectName(u"menuEdit")
         kneeboard_creator_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(kneeboard_creator_window)
         self.statusbar.setObjectName(u"statusbar")
         kneeboard_creator_window.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuEdit.menuAction())
         self.menubar.addAction(self.menuLayer.menuAction())
         self.menuLayer.addAction(self.men_new_layer)
+        self.menuLayer.addAction(self.men_duplicate_layer)
+        self.menuLayer.addAction(self.men_del_layer)
+        self.menuEdit.addAction(self.men_copy)
+        self.menuEdit.addAction(self.men_paste)
 
         self.retranslateUi(kneeboard_creator_window)
 
@@ -107,7 +122,15 @@ class Ui_kneeboard_creator_window(object):
 #if QT_CONFIG(shortcut)
         self.men_new_layer.setShortcut(QCoreApplication.translate("kneeboard_creator_window", u"F3", None))
 #endif // QT_CONFIG(shortcut)
+        self.men_copy.setText(QCoreApplication.translate("kneeboard_creator_window", u"Copy", None))
+        self.men_duplicate_layer.setText(QCoreApplication.translate("kneeboard_creator_window", u"Duplicate layer", None))
+        self.men_del_layer.setText(QCoreApplication.translate("kneeboard_creator_window", u"Delete layer", None))
+#if QT_CONFIG(shortcut)
+        self.men_del_layer.setShortcut(QCoreApplication.translate("kneeboard_creator_window", u"F4", None))
+#endif // QT_CONFIG(shortcut)
+        self.men_paste.setText(QCoreApplication.translate("kneeboard_creator_window", u"Paste", None))
         self.menuFile.setTitle(QCoreApplication.translate("kneeboard_creator_window", u"File", None))
         self.menuLayer.setTitle(QCoreApplication.translate("kneeboard_creator_window", u"Layer", None))
+        self.menuEdit.setTitle(QCoreApplication.translate("kneeboard_creator_window", u"Edit", None))
     # retranslateUi
 

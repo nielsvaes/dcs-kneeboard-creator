@@ -83,7 +83,7 @@
      <x>0</x>
      <y>0</y>
      <width>1098</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -96,8 +96,18 @@
      <string>Layer</string>
     </property>
     <addaction name="men_new_layer"/>
+    <addaction name="men_duplicate_layer"/>
+    <addaction name="men_del_layer"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="men_copy"/>
+    <addaction name="men_paste"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuLayer"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -110,6 +120,29 @@
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
+   </property>
+  </action>
+  <action name="men_copy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="men_duplicate_layer">
+   <property name="text">
+    <string>Duplicate layer</string>
+   </property>
+  </action>
+  <action name="men_del_layer">
+   <property name="text">
+    <string>Delete layer</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
+   </property>
+  </action>
+  <action name="men_paste">
+   <property name="text">
+    <string>Paste</string>
    </property>
   </action>
  </widget>

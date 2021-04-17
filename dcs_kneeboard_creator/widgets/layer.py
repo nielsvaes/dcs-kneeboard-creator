@@ -61,10 +61,9 @@ class LayerStackWidget(QListWidget):
             index = self.count() + 1
             layer_text = "New Layer %s" % index
 
-        item_widget = CustomLayerItemWidget(layer_text)
-        layer_widget_item = LayerWidgetItem(item_widget)
-        item_widget.setParent(layer_widget_item)
-
+        item_widget = CustomWidget(layer_text)
+        layer_widget_item = CustomListWidgetItem(item_widget)
+        item_widget.set_parent_list_widget_item(layer_widget_item)
 
         row = 0
         try:
@@ -97,21 +96,30 @@ class LayerStackWidget(QListWidget):
 
     def show_menu(self):
         menu = QMenu()
-        menu.addAction(utils.action("Delete", self.delete_layer, self, icon=ez_icons.get(c.black, i.delete)))
+        menu.addAction(utils.action("Delete", self.delete_selected_layers, self, icon=ez_icons.get(c.black, i.delete)))
+        menu.addAction(utils.action("Toggle visibility", self.toggle_selected_layers_visibility, self, icon=ez_icons.get(c.black, i.visibility)))
 
         menu.exec_(QCursor.pos())
 
-    def delete_layer(self, *args, **kwargs):
+    def toggle_selected_layers_visibility(self, *args, **kwargs):
         for selected_layer_item in self.selectedItems():
-            selected_layer_item.destroy_graphics_layer()
-            self.takeItem(self.row(selected_layer_item))
+            selected_layer_item.toggle_visibility()
+
+    def delete_selected_layers(self, *args, **kwargs):
+        for selected_layer_item in self.selectedItems():
+            self.delete_layer(selected_layer_item)
+
+    def delete_layer(self, item_to_delete):
+        deleted_item = self.takeItem(self.row(item_to_delete))
+        deleted_item.destroy_graphics_layer()
+        del(deleted_item)
 
     def dropEvent(self, event):
         super().dropEvent(event)
         self.set_z_depths()
 
 
-class LayerWidgetItem(QListWidgetItem):
+class CustomListWidgetItem(QListWidgetItem):
     def __init__(self, widget=None):
         super().__init__()
         self.__widget = None
@@ -120,7 +128,15 @@ class LayerWidgetItem(QListWidgetItem):
         if widget is not None:
             self.__widget = widget
 
+
+        self.__visible = True
         self.setSizeHint(widget.sizeHint())
+
+    def visible(self):
+        return self.__visible
+
+    def set_visible(self, value):
+        self.__visible = value
 
     def widget(self):
         return self.__widget
@@ -138,20 +154,32 @@ class LayerWidgetItem(QListWidgetItem):
         self.graphics_layer().destroy()
         del self.__graphics_layer
 
+    def toggle_visibility(self):
+        self.set_visible(not self.visible())
+        if self.visible():
+            self.widget().btn_visible.setIcon(QIcon(ez_icons.get(c.black, i.visibility)))
+        else:
+            self.widget().btn_visible.setIcon(QIcon(ez_icons.get(c.black, i.visibility_off)))
 
-class CustomLayerItemWidget(QWidget):
+    def destroy_self(self):
+        self.listWidget().delete_layer(self)
+
+
+class CustomWidget(QWidget):
     def __init__(self, text, parent=None):
         super().__init__(parent=parent)
         self.layout = QHBoxLayout()
 
-        self.chk_visible = QCheckBox()
-        self.chk_visible.setChecked(True)
+        self.btn_visible = QPushButton()
+        self.btn_visible.setIcon(QIcon(ez_icons.get(c.black, i.visibility)))
+        self.btn_visible.clicked.connect(self.set_visibility)
+        self.btn_visible.setFlat(True)
         self.txt_name = CustomLineEdit(text)
         self.btn_delete = QPushButton()
         self.btn_delete.setIcon(QIcon(ez_icons.get(c.black, i.delete_forever)))
         self.btn_delete.clicked.connect(self.delete_parent_item)
 
-        self.layout.addWidget(self.chk_visible)
+        self.layout.addWidget(self.btn_visible)
         self.layout.addWidget(self.txt_name)
         self.layout.addWidget(self.btn_delete)
 
@@ -161,9 +189,19 @@ class CustomLayerItemWidget(QWidget):
         self.layout.setContentsMargins(5, 3, 5, 3)
 
         self.text = text
+        self.__parent_list_widget_item = None
+
+    def parent_list_widget_item(self):
+        return self.__parent_list_widget_item
+
+    def set_parent_list_widget_item(self, value):
+        self.__parent_list_widget_item = value
 
     def delete_parent_item(self):
-        print(self.parent())
+        self.parent_list_widget_item().destroy_self()
+
+    def set_visibility(self):
+        self.parent_list_widget_item().toggle_visibility()
 
     def mouseDoubleClickEvent(self, event):
         self.txt_name.setEnabled(True)
