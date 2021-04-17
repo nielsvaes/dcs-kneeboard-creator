@@ -39,6 +39,7 @@ class ToolBox(QWidget):
             active_layer = self.parent().add_layer()
         print(active_layer.widget().txt_name.text())
 
+
 class ToolBoxButton(QToolButton):
     def __init__(self, text=None, icon=None):
         super().__init__()
@@ -54,6 +55,7 @@ class ToolBoxButton(QToolButton):
                 icon = QIcon(icon)
             self.setIcon(icon)
             self.setIconSize(WidgetSizes.toolbox_button_icon)
+
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None, margin=0, spacing=-1):
