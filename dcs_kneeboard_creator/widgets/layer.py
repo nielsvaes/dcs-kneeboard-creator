@@ -8,11 +8,6 @@ from ez_icons import i, c
 
 from .. import utils
 
-class Roles:
-    DISPLAY = Qt.DisplayRole
-    WIDGET  = Qt.UserRole + 1
-    GRAPHICS_LAYER  = Qt.UserRole + 2
-
 class LayerControlWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
@@ -85,7 +80,7 @@ class LayerStackWidget(QListWidget):
         return self.selectedItems()[0]
 
     def get_selected_widget(self):
-        return self.get_selected_layer().data(Roles.WIDGET)
+        return self.get_selected_layer().widget()
 
     def set_z_depths(self):
         try:
